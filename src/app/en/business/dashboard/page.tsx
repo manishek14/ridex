@@ -8,7 +8,7 @@ import { Users, TrendingUp, Wallet, Car } from "lucide-react";
 import Link from "next/link";
 
 export default function BusinessDashboardPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const monthlyBudget = 10000000;
   const usedBudget = mockEmployees.reduce((s, e) => s + e.usedAmount, 0);

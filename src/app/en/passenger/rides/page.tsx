@@ -18,7 +18,7 @@ const filters: { value: RideStatus | "all"; fa: string; en: string }[] = [
 ];
 
 export default function PassengerRidesPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const rides = useAppSelector((s) => s.ride.history);

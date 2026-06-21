@@ -18,7 +18,7 @@ const roleMap: Record<string, { fa: string; en: string; v: "green"|"blue"|"yello
 };
 
 export default function AdminUsersPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const [search, setSearch] = useState("");
 

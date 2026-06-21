@@ -12,7 +12,7 @@ import { mockRides, mockWallet } from "@/lib/mock-data";
 import { formatPrice, formatDate, getRideStatusLabel, timeAgo } from "@/lib/utils";
 
 export default function PassengerDashboard() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);

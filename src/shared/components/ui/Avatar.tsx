@@ -1,41 +1,54 @@
-import React from "react";
+// src/shared/components/ui/Avatar.tsx
+"use client";
+
+import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-  size?: "sm" | "md" | "lg" | "xl";
+  name?: string;
   src?: string;
-  alt?: string;
-  initials?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+  fallback?: string;
 }
 
-export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
-  ({ className, size = "md", src, alt = "Avatar", initials, ...props }, ref) => {
-    const sizeClasses = {
-      sm: "h-8 w-8 text-xs",
-      md: "h-10 w-10 text-sm",
-      lg: "h-12 w-12 text-base",
-      xl: "h-16 w-16 text-lg",
+const sizeClasses = {
+  sm: "w-8 h-8 text-xs",
+  md: "w-10 h-10 text-sm",
+  lg: "w-12 h-12 text-base",
+  xl: "w-16 h-16 text-xl",
+};
+
+export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
+  ({ className, name, src, size = "md", fallback, ...props }, ref) => {
+    const getInitials = (name: string) => {
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
     };
+
+    const initials = name ? getInitials(name) : fallback || "?";
 
     return (
       <div
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden flex-shrink-0",
+          "relative flex items-center justify-center rounded-full bg-gradient-to-br from-[var(--fg)] to-[var(--fg2)] text-[var(--bg)] font-bold flex-shrink-0",
           sizeClasses[size],
           className
         )}
         {...props}
       >
         {src ? (
-          <img src={src} alt={alt} className="h-full w-full object-cover" />
+          <img src={src} alt={name} className="w-full h-full rounded-full object-cover" />
         ) : (
-          <span className="font-semibold text-gray-700 dark:text-gray-300">
-            {initials || "?"}
-          </span>
+          <span>{initials}</span>
         )}
       </div>
     );
   }
 );
+
 Avatar.displayName = "Avatar";

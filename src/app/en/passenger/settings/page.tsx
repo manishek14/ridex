@@ -44,7 +44,7 @@ function SettingRow({ icon, label, sub, action, danger, href, onClick }: Setting
 }
 
 export default function SettingsPage() {
-  const locale = "fa";
+  const locale : any = "fa";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const resolved = useAppSelector((s) => s.theme.resolved);

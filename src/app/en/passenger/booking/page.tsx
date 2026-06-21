@@ -22,7 +22,7 @@ const rideTypes: { type: RideType; icon: string; fa: string; en: string; baseFar
 ];
 
 export default function BookingPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const toast = useToast();

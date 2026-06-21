@@ -12,7 +12,7 @@ import { updateUser } from "@/store/slices/authSlice";
 import { useToast } from "@/shared/components/feedback/Toast";
 
 export default function ProfilePage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const toast = useToast();

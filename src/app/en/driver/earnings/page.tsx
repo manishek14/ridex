@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 export default function DriverEarningsPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
 
   const totalMonth = mockDriverEarnings.reduce((s, w) => s + w.earnings, 0);

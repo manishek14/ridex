@@ -1,3 +1,4 @@
+// src/features/admin/components/AdminLiveMap.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -7,12 +8,25 @@ import { mockDrivers, mockRides } from "@/lib/mock-data";
 import { motion, AnimatePresence } from "framer-motion";
 import { Activity, Users, Car, AlertTriangle, X } from "lucide-react";
 
+// ✅ اضافه کردن type declaration برای window.L
+declare global {
+  interface Window {
+    L: any;
+  }
+}
+
+// ✅ اصلاح Entity اینترفیس
+interface Entity {
+  entityType: "driver" | "ride";
+  data: any;
+}
+
 export function AdminLiveMap({ locale = "fa" }: { locale?: string }) {
   const isFa = locale === "fa";
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState<any>(null);
+  const [selectedEntity, setSelectedEntity] = useState<Entity | null>(null);
 
   const initMap = () => {
     if (!mapRef.current || mapInstance.current || !window.L) return;
@@ -27,8 +41,10 @@ export function AdminLiveMap({ locale = "fa" }: { locale?: string }) {
       attribution: "&copy; Neshan Maps",
     }).addTo(mapInstance.current);
 
-    // Add Mock Drivers to Map
+    // ✅ Add Mock Drivers to Map
     mockDrivers.forEach((driver) => {
+      if (!driver.location) return;
+
       const marker = L.marker([driver.location.lat, driver.location.lng], {
         icon: L.divIcon({
           className: "admin-driver-marker",
@@ -36,10 +52,15 @@ export function AdminLiveMap({ locale = "fa" }: { locale?: string }) {
         })
       }).addTo(mapInstance.current);
 
-      marker.on("click", () => setSelectedEntity({ type: "driver", ...driver }));
+      marker.on("click", () => {
+        setSelectedEntity({
+          entityType: "driver",
+          data: driver
+        });
+      });
     });
 
-    // Add Mock Active Rides to Map
+    // ✅ Add Mock Active Rides to Map
     mockRides.forEach((ride) => {
       const marker = L.marker([ride.origin.lat, ride.origin.lng], {
         icon: L.divIcon({
@@ -48,7 +69,12 @@ export function AdminLiveMap({ locale = "fa" }: { locale?: string }) {
         })
       }).addTo(mapInstance.current);
 
-      marker.on("click", () => setSelectedEntity({ type: "ride", ...ride }));
+      marker.on("click", () => {
+        setSelectedEntity({
+          entityType: "ride",
+          data: ride
+        });
+      });
     });
   };
 
@@ -94,29 +120,36 @@ export function AdminLiveMap({ locale = "fa" }: { locale?: string }) {
             className={`absolute top-6 ${isFa ? "left-6" : "right-6"} bottom-6 w-80 z-20 p-6 rounded-[32px] bg-[var(--bg2)]/90 backdrop-blur-2xl border border-[var(--bdr)] shadow-2xl overflow-y-auto`}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-black">{selectedEntity.type === "driver" ? (isFa ? "جزئیات راننده" : "Driver Details") : (isFa ? "جزئیات سفر" : "Ride Details")}</h3>
-              <button onClick={() => setSelectedEntity(null)} className="p-2 rounded-xl bg-[var(--glass)] hover:bg-[var(--bdr)] transition-all">
+              <h3 className="text-lg font-black">
+                {selectedEntity.entityType === "driver" 
+                  ? (isFa ? "جزئیات راننده" : "Driver Details") 
+                  : (isFa ? "جزئیات سفر" : "Ride Details")}
+              </h3>
+              <button 
+                onClick={() => setSelectedEntity(null)} 
+                className="p-2 rounded-xl bg-[var(--glass)] hover:bg-[var(--bdr)] transition-all"
+              >
                 <X size={18} />
               </button>
             </div>
 
-            {selectedEntity.type === "driver" ? (
+            {selectedEntity.entityType === "driver" ? (
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-2xl bg-[var(--glass)] flex items-center justify-center text-2xl">👨‍✈️</div>
                   <div>
-                    <h4 className="font-black">{selectedEntity.name}</h4>
-                    <p className="text-xs text-[var(--fg4)]">{selectedEntity.vehicle.model}</p>
+                    <h4 className="font-black">{selectedEntity.data.user?.name || "راننده"}</h4>
+                    <p className="text-xs text-[var(--fg4)]">{selectedEntity.data.vehicle?.model || "خودرو"}</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3 rounded-2xl bg-[var(--glass)] border border-[var(--bdr)]">
                     <p className="text-[9px] font-bold text-[var(--fg4)] uppercase">{isFa ? "امتیاز" : "Rating"}</p>
-                    <p className="text-sm font-black text-orange-500">⭐ {selectedEntity.rating}</p>
+                    <p className="text-sm font-black text-orange-500">⭐ {selectedEntity.data.rating || 0}</p>
                   </div>
                   <div className="p-3 rounded-2xl bg-[var(--glass)] border border-[var(--bdr)]">
                     <p className="text-[9px] font-bold text-[var(--fg4)] uppercase">{isFa ? "سفرها" : "Rides"}</p>
-                    <p className="text-sm font-black">{selectedEntity.totalRides}</p>
+                    <p className="text-sm font-black">{selectedEntity.data.totalRides || 0}</p>
                   </div>
                 </div>
               </div>
@@ -124,12 +157,12 @@ export function AdminLiveMap({ locale = "fa" }: { locale?: string }) {
               <div className="space-y-6">
                 <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20">
                   <p className="text-[10px] font-black text-blue-500 uppercase mb-2">{isFa ? "مسیر سفر" : "Ride Route"}</p>
-                  <p className="text-xs font-bold mb-1 truncate">🏁 {selectedEntity.destination.address}</p>
+                  <p className="text-xs font-bold mb-1 truncate">🏁 {selectedEntity.data.destination?.address || "مقصد"}</p>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between text-xs font-bold">
                     <span className="text-[var(--fg4)]">{isFa ? "قیمت سفر" : "Price"}</span>
-                    <span>{selectedEntity.price.toLocaleString()} {isFa ? "تومان" : "IRT"}</span>
+                    <span>{selectedEntity.data.price?.toLocaleString() || 0} {isFa ? "تومان" : "IRT"}</span>
                   </div>
                   <div className="flex justify-between text-xs font-bold">
                     <span className="text-[var(--fg4)]">{isFa ? "وضعیت" : "Status"}</span>

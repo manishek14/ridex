@@ -1,81 +1,102 @@
+// src/app/en/admin/rides/page.tsx
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { useParams } from "next/navigation";
 import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
-import { Badge } from "@/shared/components/ui/index";
+import { Card, Badge } from "@/shared/components/ui/index";
 import { mockRides } from "@/lib/mock-data";
-import { formatPrice, formatDate, getRideStatusLabel, getRideTypeLabel } from "@/lib/utils";
+import { formatPrice, getRideStatusLabel, timeAgo } from "@/lib/utils";
+import { Search } from "lucide-react";
 
-export default function AdminRidesPage2() {
-  const locale = "en";
+export default function AdminRidesPage() {
+  // ✅ دریافت locale از URL
+  const params = useParams();
+  const locale : any = (params?.locale as string) || "en";
   const isFa = locale === "fa";
+
   const [search, setSearch] = useState("");
 
   const filtered = mockRides.filter(
     (r) =>
       r.origin.address.includes(search) ||
-      r.destination.address.includes(search) ||
-      r.id.includes(search)
+      r.destination?.address.includes(search) ||
+      r.passenger.name.includes(search)
   );
 
   return (
-    <DashboardLayout locale={locale} pageTitle={isFa ? "مدیریت سفرها" : "Rides"}>
+    <DashboardLayout locale={locale} pageTitle={isFa ? "مدیریت سفرها" : "Ride Management"}>
       <div dir={isFa ? "rtl" : "ltr"}>
         {/* Search */}
-        <div className="flex items-center gap-2 mb-5 px-3.5 py-2.5 rounded-xl bg-[var(--glass)] border border-[var(--bdr)] focus-within:border-[var(--bdr2)] w-full max-w-sm">
-          <Search size={14} className="text-[var(--fg4)] flex-shrink-0" />
+        <div className="relative mb-4">
+          <Search size={16} className="absolute top-1/2 -translate-y-1/2 text-[var(--fg4)]" style={{ left: isFa ? "12px" : "12px" }} />
           <input
+            type="text"
+            placeholder={isFa ? "جستجوی سفر..." : "Search rides..."}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={isFa ? "جستجو..." : "Search..."}
-            className="flex-1 bg-transparent text-sm text-[var(--fg)] placeholder:text-[var(--fg4)] outline-none"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[var(--glass)] border border-[var(--bdr)] text-[var(--fg)] text-sm placeholder:text-[var(--fg4)] outline-none focus:border-[var(--bdr2)] transition-all"
             style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}
           />
         </div>
 
         {/* Table */}
-        <div className="rounded-2xl border border-[var(--bdr)] overflow-hidden">
+        <div className="rounded-2xl bg-[var(--glass)] border border-[var(--bdr)] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="data-table">
+            <table className="w-full">
               <thead>
-                <tr>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "ID" : "ID"}</th>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "نوع" : "Type"}</th>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "مبدا" : "Origin"}</th>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "مقصد" : "Dest."}</th>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "مبلغ" : "Amount"}</th>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "وضعیت" : "Status"}</th>
-                  <th style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? "تاریخ" : "Date"}</th>
+                <tr className="border-b border-[var(--bdr)]">
+                  <th className="text-right p-3 text-[10px] font-bold text-[var(--fg4)] uppercase tracking-wider">
+                    {isFa ? "مسیر" : "Route"}
+                  </th>
+                  <th className="text-right p-3 text-[10px] font-bold text-[var(--fg4)] uppercase tracking-wider hidden md:table-cell">
+                    {isFa ? "مسافر" : "Passenger"}
+                  </th>
+                  <th className="text-right p-3 text-[10px] font-bold text-[var(--fg4)] uppercase tracking-wider">
+                    {isFa ? "قیمت" : "Price"}
+                  </th>
+                  <th className="text-right p-3 text-[10px] font-bold text-[var(--fg4)] uppercase tracking-wider hidden md:table-cell">
+                    {isFa ? "تاریخ" : "Date"}
+                  </th>
+                  <th className="text-right p-3 text-[10px] font-bold text-[var(--fg4)] uppercase tracking-wider">
+                    {isFa ? "وضعیت" : "Status"}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((ride) => {
+                {filtered.slice(0, 10).map((ride) => {
                   const st = getRideStatusLabel(ride.status, locale);
-                  const tp = getRideTypeLabel(ride.type, locale);
                   return (
-                    <tr key={ride.id}>
-                      <td className="font-mono text-[11px] text-[var(--fg4)]">{ride.id}</td>
-                      <td>
-                        <span className="flex items-center gap-1 text-[12px]">
-                          {tp.icon} <span style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>{isFa ? tp.fa : tp.en}</span>
-                        </span>
+                    <tr key={ride.id} className="border-b border-[var(--bdr)] hover:bg-[var(--glass2)] transition-colors">
+                      <td className="p-3">
+                        <p className="text-sm font-semibold text-[var(--fg)]" style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>
+                          {ride.origin.address}
+                        </p>
+                        <p className="text-[10px] text-[var(--fg4)]">→ {ride.destination?.address}</p>
                       </td>
-                      <td className="text-[12px] max-w-[140px] truncate" style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>
-                        {ride.origin.address}
+                      <td className="p-3 hidden md:table-cell">
+                        <p className="text-sm text-[var(--fg2)]">{ride.passenger.name}</p>
                       </td>
-                      <td className="text-[12px] max-w-[140px] truncate" style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>
-                        {ride.destination.address}
+                      <td className="p-3">
+                        <p className="text-sm font-bold text-[var(--fg)]">{formatPrice(ride.price, locale)}</p>
                       </td>
-                      <td className="text-[13px] font-semibold" style={{ fontFamily: isFa ? "Vazirmatn, sans-serif" : undefined }}>
-                        {formatPrice(ride.price, locale)}
+                      <td className="p-3 hidden md:table-cell">
+                        <p className="text-xs text-[var(--fg4)]">{timeAgo(ride.createdAt, locale)}</p>
                       </td>
-                      <td>
-                        <Badge variant={ride.status === "completed" ? "green" : ride.status === "cancelled" ? "red" : "blue"}>
-                          {st[locale === "fa" ? "fa" : "en"]}
+                      <td className="p-3">
+                        <Badge
+                          variant={
+                            ride.status === "completed"
+                              ? "green"
+                              : ride.status === "cancelled"
+                              ? "red"
+                              : "blue"
+                          }
+                          className="text-[10px]"
+                        >
+                          {isFa ? st.fa : st.en}
                         </Badge>
                       </td>
-                      <td className="text-[11px] text-[var(--fg4)]">{formatDate(ride.createdAt, locale)}</td>
                     </tr>
                   );
                 })}

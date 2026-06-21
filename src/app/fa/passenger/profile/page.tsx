@@ -1,5 +1,7 @@
+// src/app/fa/passenger/profile/page.tsx
 "use client";
 
+import { useParams } from "next/navigation";
 import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
 import { RideHistory } from "@/features/passenger/components/RideHistory";
 import { SavedLocations } from "@/features/passenger/components/SavedLocations";
@@ -9,7 +11,8 @@ import { Avatar } from "@/shared/components/ui/Avatar";
 import { useAppSelector } from "@/store";
 
 export default function PassengerProfilePage() {
-  const locale = "fa";
+  const params = useParams();
+  const locale = (params?.locale as string) || "fa";
   const isFa = locale === "fa";
   const user = useAppSelector((s) => s.auth.user);
 
@@ -22,7 +25,11 @@ export default function PassengerProfilePage() {
           <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-b from-[var(--fg)]/5 to-transparent" />
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
             <div className="relative">
-              <Avatar name={user?.name || "User"} size="xl" className="border-4 border-[var(--bg)] shadow-2xl" />
+              <Avatar 
+                name={user?.name || "User"} 
+                size="xl" 
+                className="border-4 border-[var(--bg)] shadow-2xl" 
+              />
               <button className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-[var(--fg)] text-[var(--bg)] border-2 border-[var(--bg)] flex items-center justify-center hover:scale-110 transition-transform">
                 <Camera size={14} />
               </button>

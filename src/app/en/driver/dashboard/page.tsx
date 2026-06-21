@@ -21,7 +21,7 @@ const statusConfig = {
 } as const;
 
 export default function DriverDashboard() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const driver = useAppSelector((s) => s.driver);

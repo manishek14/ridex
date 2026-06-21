@@ -22,7 +22,7 @@ const priorityConfig = {
 };
 
 export default function AdminSupportPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const [activeTicket, setActiveTicket] = useState<SupportTicket | null>(null);
   const [filter, setFilter] = useState<string>("all");

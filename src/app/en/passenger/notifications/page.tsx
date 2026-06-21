@@ -24,7 +24,7 @@ const typeBg: Record<string, string> = {
 };
 
 export default function NotificationsPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const { items, unreadCount } = useAppSelector((s) => s.notification);

@@ -26,9 +26,6 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-// ✅ چون الان middleware فقط redirect(locale-prefix) می‌کند و x-pathname set نمی‌کند
-// و صفحات ما جدا هستند (src/app/fa/page.tsx و src/app/en/page.tsx)، در RootLayout
-// فقط fa را پیش‌فرض می‌گذاریم.
 type Locale = "fa" | "en";
 
 async function getTheme(): Promise<"dark" | "light"> {

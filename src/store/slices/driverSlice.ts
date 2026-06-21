@@ -1,3 +1,4 @@
+// src/store/slices/driverSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { Driver, DriverStatus, Ride } from "@/types";
 
@@ -7,6 +8,8 @@ interface DriverState {
   currentRide: Ride | null;
   todayEarnings: number;
   todayRides: number;
+  loading: boolean; // ✅ اضافه کردن loading
+  error: string | null; // ✅ اضافه کردن error
 }
 
 const initialState: DriverState = {
@@ -15,6 +18,8 @@ const initialState: DriverState = {
   currentRide: null,
   todayEarnings: 0,
   todayRides: 0,
+  loading: false,
+  error: null,
 };
 
 const driverSlice = createSlice({
@@ -44,6 +49,13 @@ const driverSlice = createSlice({
       state.todayEarnings = action.payload.earnings;
       state.todayRides = action.payload.rides;
     },
+    // ✅ اضافه کردن loading و error reducers
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
+    },
+    setError(state, action: PayloadAction<string | null>) {
+      state.error = action.payload;
+    },
   },
 });
 
@@ -53,5 +65,8 @@ export const {
   setCurrentRide,
   completeRide,
   setTodayStats,
+  setLoading, // ✅ export کردن setLoading
+  setError,   // ✅ export کردن setError
 } = driverSlice.actions;
+
 export default driverSlice.reducer;

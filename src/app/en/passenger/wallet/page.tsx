@@ -16,7 +16,7 @@ import { formatPrice, formatDate, getTransactionLabel } from "@/lib/utils";
 const quickAmounts = [100000, 200000, 500000, 1000000];
 
 export default function WalletPage() {
-  const locale = "en";
+  const locale : any = "en";
   const isFa = locale === "fa";
   const dispatch = useAppDispatch();
   const toast = useToast();

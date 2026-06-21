@@ -12,6 +12,8 @@ const buttonVariants = cva(
       variant: {
         primary:
           "bg-[var(--btn-bg)] text-[var(--btn-fg)] border-none hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0",
+        secondary:
+          "bg-[var(--glass)] text-[var(--fg2)] border border-[var(--bdr)] hover:bg-[var(--glass2)] hover:text-[var(--fg)] hover:border-[var(--bdr2)]",
         ghost:
           "bg-transparent text-[var(--fg3)] border border-[var(--bdr)] hover:text-[var(--fg)] hover:border-[var(--bdr2)] hover:bg-[var(--glass)]",
         glass:
@@ -31,7 +33,6 @@ const buttonVariants = cva(
         icon: "w-9 h-9 rounded-[9px]",
         "icon-lg": "w-10 h-10 rounded-[10px]",
       },
-      // ✅ اضافه کردن fullWidth به variants
       fullWidth: {
         true: "w-full",
       },
@@ -58,7 +59,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className, 
       variant, 
       size, 
-      fullWidth, // ✅ اینجا دریافت می‌شود
+      fullWidth,
       loading, 
       leftIcon, 
       rightIcon, 
@@ -72,7 +73,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          buttonVariants({ variant, size, fullWidth }), // ✅ اینجا استفاده می‌شود
+          buttonVariants({ variant, size, fullWidth }),
           className
         )}
         disabled={disabled || loading}

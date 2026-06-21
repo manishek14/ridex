@@ -1,6 +1,6 @@
 // src/store/slices/rideSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Ride, RideType, Location } from "@/types";
+import type { Ride, RideType, Location, RideStatus } from "@/types";
 
 interface BookingState {
   origin: Location | null;
@@ -15,6 +15,7 @@ interface RideState {
   booking: BookingState;
   history: Ride[];
   isSearching: boolean;
+  status: "idle" | "searching" | "active" | "completed"; // ✅ اضافه کردن status
 }
 
 const initialState: RideState = {
@@ -28,6 +29,7 @@ const initialState: RideState = {
   },
   history: [],
   isSearching: false,
+  status: "idle", // ✅ مقدار اولیه
 };
 
 const rideSlice = createSlice({
@@ -58,40 +60,38 @@ const rideSlice = createSlice({
     // ── Searching ────────────────────────────────────────────
     setSearching(state, action: PayloadAction<boolean>) {
       state.isSearching = action.payload;
+      state.status = action.payload ? "searching" : "idle"; // ✅ به‌روزرسانی status
     },
 
     // ── Current Ride ─────────────────────────────────────────
     setCurrentRide(state, action: PayloadAction<Ride | null>) {
       state.currentRide = action.payload;
       state.isSearching = false;
+      state.status = action.payload ? "active" : "idle"; // ✅ به‌روزرسانی status
     },
 
-    // ✅ به‌روزرسانی وضعیت سفر جاری (با rideId)
-    setRideStatus(
+    // ── Ride Status ──────────────────────────────────────────
+    setRideStatus(state, action: PayloadAction<"idle" | "searching" | "active" | "completed">) {
+      state.status = action.payload;
+      if (action.payload === "searching") {
+        state.isSearching = true;
+      } else if (action.payload === "idle") {
+        state.isSearching = false;
+      }
+    },
+
+    // ── Update Ride Status (با rideId) ──────────────────────
+    updateRideStatus(
       state,
-      action: PayloadAction<{ rideId: string; status: Ride["status"] }>
+      action: PayloadAction<{ rideId: string; status: RideStatus }>
     ) {
       const { rideId, status } = action.payload;
-
-      // به‌روزرسانی currentRide اگر همان سفر باشد
       if (state.currentRide && state.currentRide.id === rideId) {
         state.currentRide.status = status;
       }
-
-      // به‌روزرسانی در history
       const historyRide = state.history.find(r => r.id === rideId);
       if (historyRide) {
         historyRide.status = status;
-      }
-    },
-
-    // ✅ به‌روزرسانی وضعیت سفر جاری (بدون rideId - برای سفر فعلی)
-    updateRideStatus(
-      state,
-      action: PayloadAction<{ status: Ride["status"] }>
-    ) {
-      if (state.currentRide) {
-        state.currentRide.status = action.payload.status;
       }
     },
 
@@ -104,6 +104,7 @@ const rideSlice = createSlice({
           completedAt: new Date().toISOString(),
         });
         state.currentRide = null;
+        state.status = "completed"; // ✅ به‌روزرسانی status
       }
     },
 
@@ -117,34 +118,23 @@ const rideSlice = createSlice({
       state.currentRide = null;
       state.booking = initialState.booking;
       state.isSearching = false;
+      state.status = "idle"; // ✅ reset status
     },
   },
 });
 
-// ── Exports ──────────────────────────────────────────────────
 export const {
-  // Booking
   setOrigin,
   setDestination,
   setRideType,
   setEstimate,
   resetBooking,
-
-  // Searching
   setSearching,
-
-  // Current Ride
   setCurrentRide,
-  setRideStatus,      // ✅ با rideId
-  updateRideStatus,   // ✅ بدون rideId (برای سفر فعلی)
-
-  // Complete
+  setRideStatus, // ✅ export جدید
+  updateRideStatus,
   completeRide,
-
-  // History
   setRideHistory,
-
-  // Clear
   clearRideState,
 } = rideSlice.actions;
 
