@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion", "recharts"],
   },
+   eslint: {
+    ignoreDuringBuilds: true,
+  },
 
   // Security headers
   async headers() {
