@@ -1,5 +1,7 @@
+// src/app/en/admin/dashboard/page.tsx
 "use client";
 
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
 import { Card, Badge } from "@/shared/components/ui/index";
@@ -13,8 +15,11 @@ import {
 import Link from "next/link";
 
 export default function AdminDashboardPage() {
-  const locale = "en";
+  // ✅ دریافت locale از URL
+  const params = useParams();
+  const locale = (params?.locale as string) || "en";
   const isFa = locale === "fa";
+
   const stats = mockAdminStats;
 
   const statCards = [
