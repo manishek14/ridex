@@ -1,10 +1,22 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "ridex",
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ridex2",
   "compatibility_date": "2026-06-30",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
-    "enabled": false
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
   },
   "build": {
     "command": "pnpm run build"
