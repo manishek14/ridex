@@ -1,0 +1,128 @@
+/*
+  RideX — Global Styles
+  Tailwind CSS v4 — CSS-first config
+*/
+
+/* ── Tailwind CSS v4 ─────────────────────────────────────────── */
+@import "tailwindcss";
+
+/*
+  ── TAILWIND v4 THEME ────────────────────────────────────────────
+*/
+@theme {
+  /* Colors — Mapping our design tokens as Tailwind colors */
+  --color-bg: #080808;
+  --color-bg2: #111111;
+  --color-bg3: #181818;
+  --color-fg: #ffffff;
+  --color-fg2: rgba(255, 255, 255, 0.90);
+  --color-fg3: rgba(255, 255, 255, 0.60);
+  --color-fg4: rgba(255, 255, 255, 0.30);
+  --color-bdr: rgba(255, 255, 255, 0.08);
+  --color-bdr2: rgba(255, 255, 255, 0.15);
+  --color-glass: rgba(255, 255, 255, 0.04);
+  --color-glass2: rgba(255, 255, 255, 0.08);
+  --color-btn-bg: #ffffff;
+  --color-btn-fg: #080808;
+
+  /* Screens */
+  --breakpoint-xs: 390px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+
+  /* Border radius */
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  /* Animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-slide-down: slideDown 0.3s ease-out;
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-pulse2: pulse2 2s ease-in-out infinite;
+  --animate-ticker: ticker 26s linear infinite;
+  --animate-ring: ring 2.5s ease-out infinite;
+  --animate-spin-slow: spin 12s linear infinite;
+}
+
+/* ── DESIGN TOKEN ALIASES ────────────────────────────────────────
+   Many components reference var(--fg), var(--bg), var(--bdr2), etc.
+   Tailwind v4 only auto-defines --color-* names, so we mirror them
+   into the short aliases so inline styles work in both themes. */
+:root {
+  --bg: var(--color-bg);
+  --bg2: var(--color-bg2);
+  --bg3: var(--color-bg3);
+  --fg: var(--color-fg);
+  --fg2: var(--color-fg2);
+  --fg3: var(--color-fg3);
+  --fg4: var(--color-fg4);
+  --bdr: var(--color-bdr);
+  --bdr2: var(--color-bdr2);
+  --glass: var(--color-glass);
+  --glass2: var(--color-glass2);
+  --btn-bg: var(--color-btn-bg);
+  --btn-fg: var(--color-btn-fg);
+}
+
+/* ── LIGHT THEME OVERRIDES ───────────────────────────────────── */
+[data-theme="light"] {
+  --color-bg: #f4f4f6;
+  --color-bg2: #ffffff;
+  --color-bg3: #ededf0;
+  --color-fg: #080808;
+  --color-fg2: rgba(0, 0, 0, 0.85);
+  --color-fg3: rgba(0, 0, 0, 0.55);
+  --color-fg4: rgba(0, 0, 0, 0.25);
+  --color-bdr: rgba(0, 0, 0, 0.08);
+  --color-bdr2: rgba(0, 0, 0, 0.15);
+  --color-glass: rgba(0, 0, 0, 0.03);
+  --color-glass2: rgba(0, 0, 0, 0.06);
+  --color-btn-bg: #080808;
+  --color-btn-fg: #ffffff;
+}
+
+/* ── KEYFRAMES ──────────────────────────────────────────────── */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes pulse2 { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes ring { 0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.7); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); } }
+
+/* ── BASE RESET ──────────────────────────────────────────────── */
+:root {
+  --sidebar-w: 260px;
+  --header-h: 64px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.50);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.30);
+}
+
+[data-theme="light"] {
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-vazirmatn), system-ui, sans-serif;
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+[dir="rtl"] body { font-family: var(--font-vazirmatn), system-ui, sans-serif; }
+
+/* ── UTILITIES ────────────────────────────────────────────────── */
+@layer utilities {
+  .glass {
+    background: var(--color-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-bdr);
+  }
+}

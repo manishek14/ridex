@@ -1,0 +1,58 @@
+src\app\en\about
+  Directory: D:\Downloads\ridex6\src\app\fa\admin
+
+
+Mode                 LastWriteTime         Length Name                                                                    
+----                 -------------         ------ ----                                                                    
+d-----         6/21/2026  12:16 PM                dashboard                                                               
+d-----         6/21/2026  12:16 PM                drivers                                                                 
+d-----         6/21/2026  12:16 PM                payments                                                                
+d-----         6/21/2026  12:16 PM                reports                                                                 
+d-----         6/21/2026  12:16 PM                rides                                                                   
+d-----         6/21/2026  12:16 PM                settings                                                                
+d-----         6/21/2026  12:16 PM                support                                                                 
+d-----         6/21/2026  12:16 PM                users      (i wanna en directory be like this )
+
+src\app\en\blog
+
+src\app\en\business page.tsx (main)
+
+src\app\en\contact
+
+src\app\en\download
+
+src\app\en\driver page.tsx (main)
+
+src\app\en\passenger page.tsx (main)
+
+src\app\api\auth 
+
+src\app\fa\admin\drivers
+
+src\app\fa\admin\payments
+
+src\app\fa\admin\reports\page.tsx
+
+src\app\fa\admin\settings\page.tsx
+
+src\app\fa\business\settings
+
+src\app\fa\driver\wallet
+
+src\app\fa\driver\rides\page.tsx
+
+src\app\fa\passenger
+
+src\app\fa\forgot-password
+
+src\features\business\hooks
+
+src\features\admin\hooks
+
+src\features\wallet\hooks
+
+src\features\ride\hooks
+
+src\features\passenger\hooks
+
+نشان
