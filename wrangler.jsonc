@@ -7,7 +7,7 @@
     "enabled": false
   },
   "build": {
-    "command": "npm run build"
+    "command": "pnpm run build"
   },
   "assets": {
     "directory": ".next/static",
