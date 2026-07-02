@@ -8,10 +8,10 @@
     "start": "next start",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "cf:build": "npx @cloudflare/next-on-pages",
-    "cf:deploy": "npm run cf:build && npx wrangler deploy",
-    "cf:preview": "npm run cf:build && npx wrangler dev",
-    "cf:pages:deploy": "npm run cf:build && npx wrangler pages deploy .vercel/output/static"
+    "cf:build": "pnpm exec @cloudflare/next-on-pages",
+    "cf:deploy": "pnpm run cf:build && pnpm exec wrangler deploy",
+    "cf:preview": "pnpm run cf:build && pnpm exec wrangler dev",
+    "cf:pages:deploy": "pnpm run cf:build && pnpm exec wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
     "@fontsource-variable/vazirmatn": "^5.1.1",

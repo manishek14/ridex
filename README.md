@@ -8,10 +8,10 @@
 
 ```bash
 # 1. نصب وابستگی‌ها
-npm install
+pnpm install
 
 # 2. اجرای محیط توسعه
-npm run dev
+pnpm run dev
 
 # 3. باز کردن در مرورگر
 # http://localhost:3000
