@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "ridex2",
+  "name": "ridex3",
   "compatibility_date": "2026-06-30",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
